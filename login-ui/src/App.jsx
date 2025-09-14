@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const chatId = urlParams.get("chat_id");   // ✅ Extract chat_id from URL
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -15,7 +17,7 @@ function App() {
 const handleSubmit = async (e) => {
   e.preventDefault();
  try {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login/${chatId}`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ username, password }),
