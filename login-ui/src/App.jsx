@@ -14,19 +14,19 @@ function App() {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-
-
   try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}login`, {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ username, password }),
     });
 
+    const data = await res.json(); // ✅ Always parse response
+
     if (res.ok) {
-      setMessage("✅ Login successful! Credentials saved.");
+      setMessage(data.message || "✅ Login successful!");
     } else {
-      setMessage("❌ Login failed. Try again.");
+      setMessage(data.message || "❌ Login failed. Try again.");
     }
   } catch (err) {
     console.error(err);
