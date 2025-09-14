@@ -17,10 +17,10 @@ function App() {
 const handleSubmit = async (e) => {
   e.preventDefault();
  try {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login/${chatId}`, {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login/$`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ username, password }),
+    body: new URLSearchParams({ username, password,chat_id: chatId }),
   });
 
   const text = await res.text(); // read response as plain text
