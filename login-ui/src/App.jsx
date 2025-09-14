@@ -14,24 +14,25 @@ function App() {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-  try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ username, password }),
-    });
+ try {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ username, password }),
+  });
 
-    const data = await res.json(); // ✅ Always parse response
+  const text = await res.text(); // read response as plain text
 
-    if (res.ok) {
-      setMessage(data.message || "✅ Login successful!");
-    } else {
-      setMessage(data.message || "❌ Login failed. Try again.");
-    }
-  } catch (err) {
-    console.error(err);
-    setMessage("⚠️ Server error.");
+  if (res.ok) {
+    setMessage("✅ Login successful! " + text);
+  } else {
+    setMessage("❌ Login failed. " + text);
   }
+} catch (err) {
+  console.error("Frontend error:", err);
+  setMessage("⚠️ Server error: " + err.message);
+}
+
 };
 
 
