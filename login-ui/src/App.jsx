@@ -16,25 +16,31 @@ function App() {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
- try {
-  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login/${chatId}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ username, password }),
-  });
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login/${chatId}`, {
+      method: "POST",
+      // Change #1: Set the correct header for JSON data
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // Change #2: Convert the JavaScript object to a JSON string
+      body: JSON.stringify({ username, password }),
+    });
 
-  const text = await res.text(); // read response as plain text
+    // Change #3: Parse the server's response as JSON, not plain text
+    const data = await res.json(); 
 
-  if (res.ok) {
-    setMessage("✅ Login successful! " + text);
-  } else {
-    setMessage("❌ Login failed. " + text);
+    if (res.ok) {
+      // Now you can access properties from the JSON response
+      setMessage(`✅ Login successful! Status: ${data.status}`);
+    } else {
+      // Access the error message from the JSON response
+      setMessage(`❌ Login failed: ${data.error}`);
+    }
+  } catch (err) {
+    console.error("Frontend error:", err);
+    setMessage("⚠️ Server error: " + err.message);
   }
-} catch (err) {
-  console.error("Frontend error:", err);
-  setMessage("⚠️ Server error: " + err.message);
-}
-
 };
 
 
